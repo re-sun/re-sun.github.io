@@ -90,8 +90,8 @@ Starting httpd: (98)Address already in use: make_sock: cou">
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-18T03:44:59.000Z" itemprop="datePublished">2016-08-18</time>
-    更新日期:<time datetime="2016-08-18T03:44:59.000Z" itemprop="dateModified">2016-08-18</time>
+    <time datetime="2016-08-18T03:54:05.000Z" itemprop="datePublished">2016-08-18</time>
+    更新日期:<time datetime="2016-08-18T03:54:05.000Z" itemprop="dateModified">2016-08-18</time>
     
   </p>
 </header>
@@ -119,6 +119,15 @@ Starting httpd: (98)Address already in use: make_sock: cou">
 <p>./httpd</p>
 <p>情报君网站终于恢复了。。</p>
 <p>一大早搞的我都没心情吃饭了。。</p>
+<hr>
+<p>之前还遇到一个错误</p>
+<p>在使用service httpd restart 命令重启httpd时</p>
+<p>报出一个警告：</p>
+<p>Starting httpd: httpd: Could not reliably determine the server’s fully qualified domain name, using 10.163.238.221 for ServerName</p>
+<p>这个也很好解决</p>
+<p>找到/etc/httpd/conf/目录下的httpd.conf文件</p>
+<p>里边有一行ServerName</p>
+<p>修改为 ServerName localhost:80 就好了 如果有注释 要去掉注释</p>
 
     </div>
     <footer>
