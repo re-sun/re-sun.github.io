@@ -90,8 +90,8 @@ Starting httpd: (98)Address already in use: make_sock: cou">
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-18T03:58:48.000Z" itemprop="datePublished">2016-08-18</time>
-    更新日期:<time datetime="2016-08-18T03:58:48.000Z" itemprop="dateModified">2016-08-18</time>
+    <time datetime="2016-08-18T06:51:53.000Z" itemprop="datePublished">2016-08-18</time>
+    更新日期:<time datetime="2016-08-18T06:51:53.000Z" itemprop="dateModified">2016-08-18</time>
     
   </p>
 </header>
@@ -103,7 +103,7 @@ Starting httpd: (98)Address already in use: make_sock: cou">
 <p>好吧，于是我使用命令查看到底是谁占用了80端口</p>
 <p>netstat -lnp | grep 80</p>
 <p>结果是这样。。</p>
-<p>tcp        0      0 0.0.0.0:8080                0.0.0.0:<em>                   LISTEN      20409/java<br>tcp        0      0 0.0.0.0:80                  0.0.0.0:</em>                   LISTEN      1321/httpd<br>tcp        0      0 0.0.0.0:8085                0.0.0.0:<em>                   LISTEN      11688/nginx<br>tcp        0      0 127.0.0.1:8005              0.0.0.0:</em>                   LISTEN      20409/java<br>tcp        0      0 0.0.0.0:8009                0.0.0.0:*                   LISTEN      20409/java          </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">8080</span>                <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">20409</span>/java          </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">80</span>                  <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">1321</span>/httpd          </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">8085</span>                <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">11688</span>/nginx         </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">127.0</span>.0.1:<span class="number">8005</span>              <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">20409</span>/java          </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">8009</span>                <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">20409</span>/java</span><br></pre></td></tr></table></figure>
 <p>恩。。httpd。。。</p>
 <p>然后毫不犹豫的杀掉所有httpd进程</p>
 <p>pkill httpd</p>
