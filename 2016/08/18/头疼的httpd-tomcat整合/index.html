@@ -15,17 +15,17 @@
 	})();
 	</script>
   
-  <title>2016.7.27杂想 | Sun</title>
+  <title>头疼的httpd+tomcat整合 | Sun</title>
   <meta name="author" content="Sun">
   
-  <meta name="description" content="最近这段时间，工作效率并不是很高，想的比较多，每天都很忙碌，但是工作成果并不明显，用户增加缓慢，压力很大，可以用一个词来形容最近的状况，寝食难安。
-
-现在资本寒冬，融资困难，很多想做的事情做不了，而很多事情做了之后并没有多大起色。诶，先工作吧。。。">
+  <meta name="description" content="今天折腾了一早上，刚才差点给跪了，因为在远程服务器上我不知道原先已经安装了httpd，后来我又用yum安装了一遍，然后修改各种配置，再重启。。。
+重启的时候提示我，端口已经被占用。。
+Starting httpd: (98)Address already in use: make_sock: cou">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="2016.7.27杂想"/>
+  <meta property="og:title" content="头疼的httpd+tomcat整合"/>
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -83,23 +83,42 @@
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	2016.7.27杂想
+	头疼的httpd+tomcat整合
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-07-27T02:17:59.000Z" itemprop="datePublished">2016-07-27</time>
-    更新日期:<time datetime="2016-07-27T02:17:59.000Z" itemprop="dateModified">2016-07-27</time>
+    <time datetime="2016-08-18T03:44:59.000Z" itemprop="datePublished">2016-08-18</time>
+    更新日期:<time datetime="2016-08-18T03:44:59.000Z" itemprop="dateModified">2016-08-18</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>最近这段时间，工作效率并不是很高，想的比较多，每天都很忙碌，但是工作成果并不明显，用户增加缓慢，压力很大，可以用一个词来形容最近的状况，寝食难安。</p>
-<p></p><p></p>
-<p></p><p><br>现在资本寒冬，融资困难，很多想做的事情做不了，而很多事情做了之后并没有多大起色。诶，先工作吧。。。</p>
+        <p>今天折腾了一早上，刚才差点给跪了，因为在远程服务器上我不知道原先已经安装了httpd，后来我又用yum安装了一遍，然后修改各种配置，再重启。。。</p>
+<p>重启的时候提示我，端口已经被占用。。</p>
+<p>Starting httpd: (98)Address already in use: make_sock: could not bind to address 0.0.0.0:80<br>no listening sockets available, shutting down</p>
+<p>好吧，于是我使用命令查看到底是谁占用了80端口</p>
+<p>netstat -lnp | grep 80</p>
+<p>结果是这样。。</p>
+<p>tcp        0      0 0.0.0.0:8080                0.0.0.0:<em>                   LISTEN      20409/java<br>tcp        0      0 0.0.0.0:80                  0.0.0.0:</em>                   LISTEN      1321/httpd<br>tcp        0      0 0.0.0.0:8085                0.0.0.0:<em>                   LISTEN      11688/nginx<br>tcp        0      0 127.0.0.1:8005              0.0.0.0:</em>                   LISTEN      20409/java<br>tcp        0      0 0.0.0.0:8009                0.0.0.0:*                   LISTEN      20409/java          </p>
+<p>恩。。httpd。。。</p>
+<p>然后毫不犹豫的杀掉所有httpd进程</p>
+<p>pkill httpd</p>
+<p>接着重启</p>
+<p>service httpd restart</p>
+<p>卧槽。。</p>
+<p>奔溃了。。</p>
+<p>情报君的网站打不开了。。</p>
+<p>提示找不到首页的php。。。</p>
+<p>要跪了。。</p>
+<p>后来想，应该是两个httpd的问题，我重启的并不是之前所用的http</p>
+<p>然后找到之前所用的httpd路径，找到bin目录，执行命令</p>
+<p>./httpd</p>
+<p>情报君网站终于恢复了。。</p>
+<p>一大早搞的我都没心情吃饭了。。</p>
 
     </div>
     <footer>
@@ -150,10 +169,8 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/08/18/头疼的httpd-tomcat整合/" class="alignleft prev" title="头疼的httpd+tomcat整合">头疼的httpd+tomcat整合</a>
     
-    
-    <a href="/2016/06/08/【日记】25岁的第一天/" class="alignright next" title="【日记】25岁的第一天">【日记】25岁的第一天</a>
+    <a href="/2016/07/27/2016-7-27杂想/" class="alignright next" title="2016.7.27杂想">2016.7.27杂想</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -163,7 +180,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/07/27/2016-7-27杂想/" data-title="2016.7.27杂想" data-url="www.sunyi.pub/2016/07/27/2016-7-27杂想/"></div>
+		<div class="ds-thread" data-thread-key="2016/08/18/头疼的httpd-tomcat整合/" data-title="头疼的httpd+tomcat整合" data-url="www.sunyi.pub/2016/08/18/头疼的httpd-tomcat整合/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
