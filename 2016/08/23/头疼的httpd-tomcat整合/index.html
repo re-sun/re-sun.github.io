@@ -90,8 +90,8 @@ Starting httpd: (98)Address already in use: make_sock: cou">
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-18T06:51:53.000Z" itemprop="datePublished">2016-08-18</time>
-    更新日期:<time datetime="2016-08-18T06:51:53.000Z" itemprop="dateModified">2016-08-18</time>
+    <time datetime="2016-08-23T03:31:52.000Z" itemprop="datePublished">2016-08-23</time>
+    更新日期:<time datetime="2016-08-23T03:31:52.000Z" itemprop="dateModified">2016-08-23</time>
     
   </p>
 </header>
@@ -99,16 +99,32 @@ Starting httpd: (98)Address already in use: make_sock: cou">
 		
         <p>今天折腾了一早上，刚才差点给跪了，因为在远程服务器上我不知道原先已经安装了httpd，后来我又用yum安装了一遍，然后修改各种配置，再重启。。。</p>
 <p>重启的时候提示我，端口已经被占用。。</p>
-<p>Starting httpd: (98)Address already in use: make_sock: could not bind to address 0.0.0.0:80<br>no listening sockets available, shutting down</p>
+<pre><code>Starting httpd: (98)Address already in use: make_sock: could not bind to address 0.0.0.0:80
+no listening sockets available, shutting down
+</code></pre>
+
 <p>好吧，于是我使用命令查看到底是谁占用了80端口</p>
-<p>netstat -lnp | grep 80</p>
+<pre><code>netstat -lnp | grep 80
+</code></pre>
+
 <p>结果是这样。。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">8080</span>                <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">20409</span>/java          </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">80</span>                  <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">1321</span>/httpd          </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">8085</span>                <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">11688</span>/nginx         </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">127.0</span>.0.1:<span class="number">8005</span>              <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">20409</span>/java          </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">8009</span>                <span class="number">0.0</span>.0.0:*                   LISTEN      <span class="number">20409</span>/java</span><br></pre></td></tr></table></figure>
+<pre><code>tcp        0      0 0.0.0.0:8080                0.0.0.0:*                   LISTEN      20409/java          
+tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      1321/httpd          
+tcp        0      0 0.0.0.0:8085                0.0.0.0:*                   LISTEN      11688/nginx         
+tcp        0      0 127.0.0.1:8005              0.0.0.0:*                   LISTEN      20409/java          
+tcp        0      0 0.0.0.0:8009                0.0.0.0:*                   LISTEN      20409/java          
+</code></pre>
+
+
 <p>恩。。httpd。。。</p>
 <p>然后毫不犹豫的杀掉所有httpd进程</p>
-<p>pkill httpd</p>
+<pre><code>pkill httpd
+</code></pre>
+
 <p>接着重启</p>
-<p>service httpd restart</p>
+<pre><code>service httpd restart
+</code></pre>
+
 <p>卧槽。。</p>
 <p>奔溃了。。</p>
 <p>情报君的网站打不开了。。</p>
@@ -116,7 +132,9 @@ Starting httpd: (98)Address already in use: make_sock: cou">
 <p>要跪了。。</p>
 <p>后来想，应该是两个httpd的问题，我重启的并不是之前所用的http</p>
 <p>然后找到之前所用的httpd路径，找到bin目录，执行命令</p>
-<p>./httpd</p>
+<pre><code>./httpd
+</code></pre>
+
 <p>情报君网站终于恢复了。。</p>
 <p>一大早搞的我都没心情吃饭了。。</p>
 <blockquote>
@@ -124,7 +142,10 @@ Starting httpd: (98)Address already in use: make_sock: cou">
 </blockquote>
 <p>在使用service httpd restart 命令重启httpd时</p>
 <p>报出一个警告：</p>
-<p>Starting httpd: httpd: Could not reliably determine the server’s fully qualified domain name, using 10.163.238.221 for ServerName</p>
+<pre><code>
+Starting httpd: httpd: Could not reliably determine the server's fully qualified domain name, using 10.163.238.221 for ServerName
+</code></pre>
+
 <p>这个也很好解决</p>
 <p>找到/etc/httpd/conf/目录下的httpd.conf文件</p>
 <p>里边有一行ServerName</p>
@@ -180,7 +201,7 @@ with(document)0[
  <nav id="pagination" >
     
     
-    <a href="/2016/07/27/2016-7-27杂想/" class="alignright next" title="2016.7.27杂想">2016.7.27杂想</a>
+    <a href="/2016/08/23/如何使用httpd反代理tomcat/" class="alignright next" title="如何使用httpd反代理tomcat">如何使用httpd反代理tomcat</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -190,7 +211,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/08/18/头疼的httpd-tomcat整合/" data-title="头疼的httpd+tomcat整合" data-url="www.sunyi.pub/2016/08/18/头疼的httpd-tomcat整合/"></div>
+		<div class="ds-thread" data-thread-key="2016/08/23/头疼的httpd-tomcat整合/" data-title="头疼的httpd+tomcat整合" data-url="www.sunyi.pub/2016/08/23/头疼的httpd-tomcat整合/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
