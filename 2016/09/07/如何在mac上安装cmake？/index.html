@@ -90,8 +90,8 @@ Unix/Linux Source (has \n line feeds)    cmake-3.6.1.ta">
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-09-06T16:04:28.000Z" itemprop="datePublished">2016-09-07</time>
-    更新日期:<time datetime="2016-09-06T16:04:28.000Z" itemprop="dateModified">2016-09-07</time>
+    <time datetime="2016-09-07T01:57:47.000Z" itemprop="datePublished">2016-09-07</time>
+    更新日期:<time datetime="2016-09-07T01:57:47.000Z" itemprop="dateModified">2016-09-07</time>
     
   </p>
 </header>
@@ -107,21 +107,24 @@ Unix/Linux Source (has \n line feeds)    cmake-3.6.1.ta">
 </code></pre>
 
 <p>输入你的电脑账户密码后开始安装</p>
-<pre><code>sunyidembp:~ sunyi$ cd /Users/sunyi/Documents/
-sunyidembp:Documents sunyi$ tar -zxvf cmake-3.6.1.tar.gz 
-x cmake-3.6.1/.clang-format
-x cmake-3.6.1/.gitattributes
-x cmake-3.6.1/.hooks-config.bash
-x cmake-3.6.1/Auxiliary/
-x cmake-3.6.1/Auxiliary/bash-completion/
-x cmake-3.6.1/Auxiliary/bash-completion/cmake
-x cmake-3.6.1/Auxiliary/bash-completion/CMakeLists.txt
-x cmake-3.6.1/Auxiliary/bash-completion/cpack
-x cmake-3.6.1/Auxiliary/bash-completion/ctest
-x cmake-3.6.1/Auxiliary/cmake-help.vim
-x cmake-3.6.1/Auxiliary/cmake-indent.vim
-x cmake-3.6.1/Auxiliary/cmake-mode.el
-x cmake-3.6.1/Auxiliary/cmake-syntax.vim
+<pre><code>sunyidembp:cmake sunyi$ sudo ./bootstrap && sudo make && sudo make install
+CMake 3.6.1, Copyright 2000-2016 Kitware, Inc.
+Found GNU toolchain
+C compiler on this system is: gcc 
+C++ compiler on this system is: g++ 
+Makefile processor on this system is: make
+g++ is GNU compiler
+g++ has setenv
+g++ has unsetenv
+g++ does not have environ in stdlib.h
+g++ has stl wstring
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmake.cxx -o cmake.o
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmakemain.cxx -o cmakemain.o
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmcmd.cxx -o cmcmd.o
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommandArgumentLexer.cxx -o cmCommandArgumentLexer.o
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommandArgumentParser.cxx -o cmCommandArgumentParser.o
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommandArgumentParserHelper.cxx -o cmCommandArgumentParserHelper.o
+g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommonTargetGenerator.cxx -o cmCommonTargetGenerator.o
 </code></pre>
 
 <p>中间会再次要求输入一次密码，即可完成安装。</p>
