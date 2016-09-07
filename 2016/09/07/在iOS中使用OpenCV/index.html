@@ -15,17 +15,16 @@
 	})();
 	</script>
   
-  <title>如何在mac上安装cmake？ | Sun</title>
+  <title>在iOS中使用OpenCV | Sun</title>
   <meta name="author" content="Sun">
   
-  <meta name="description" content="由于在mac上安装opencv需要使用到cmake，故今日尝试了一下，很简单。
-1、前往cmake官网，http://www.cmake.org/download/，下载cmake安装程序
-Unix/Linux Source (has \n line feeds)    cmake-3.6.1.ta">
+  <meta name="description" content="在iOS中使用Open VC比在windows和mac中使用要简单多了，先去Open VC官网下载对应的库文件（opencv2.framework.zip），解压后通过Xcode导入到工程中，导入完成后，来看看如何使用OpenVC。
+本文只简单介绍利用OpenVC将UIImage和Mat互相转换并且">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="如何在mac上安装cmake？"/>
+  <meta property="og:title" content="在iOS中使用OpenCV"/>
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -83,51 +82,174 @@ Unix/Linux Source (has \n line feeds)    cmake-3.6.1.ta">
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	如何在mac上安装cmake？
+	在iOS中使用OpenCV
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-09-07T01:57:47.000Z" itemprop="datePublished">2016-09-07</time>
-    更新日期:<time datetime="2016-09-07T01:57:47.000Z" itemprop="dateModified">2016-09-07</time>
+    <time datetime="2016-09-07T03:56:04.000Z" itemprop="datePublished">2016-09-07</time>
+    更新日期:<time datetime="2016-09-07T03:56:04.000Z" itemprop="dateModified">2016-09-07</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>由于在mac上安装opencv需要使用到cmake，故今日尝试了一下，很简单。</p>
-<p>1、前往cmake官网，<a href="http://www.cmake.org/download/，下载cmake安装程序" target="_blank" rel="external">http://www.cmake.org/download/，下载cmake安装程序</a></p>
-<pre><code>Unix/Linux Source (has \n line feeds)    cmake-3.6.1.tar.gz
+        <p>在iOS中使用Open VC比在windows和mac中使用要简单多了，先去Open VC官网下载对应的库文件（opencv2.framework.zip），解压后通过Xcode导入到工程中，导入完成后，来看看如何使用OpenVC。</p>
+<p>本文只简单介绍利用OpenVC将UIImage和Mat互相转换并且显示出来。</p>
+<p>先贴代码</p>
+<p>####MainViewController.h</p>
+<pre><code>//
+//  MainViewController.h
+//  OCRTest
+//
+//  Created by 孙裔 on 9/7/16.
+//  Copyright © 2016 QingSun. All rights reserved.
+//
+
+#import <uikit uikit.h="">
+
+using namespace cv;
+
+@interface MainViewController : UIViewController
+
+@end
+</uikit></code></pre>
+
+<p>这里说一下，使用OpenCV，需要在头文件中引入命名空间cv，也就是添加这一句：</p>
+<pre><code>using namespace cv;
 </code></pre>
 
-<p>2、解压下载的安装包后，进入到cmake目录，执行以下命令</p>
-<pre><code>sudo ./bootstrap && sudo make && sudo make install
+
+<p>####MainViewController.mm</p>
+<pre><code>//
+//  MainViewController.m
+//  OCRTest
+//
+//  Created by 孙裔 on 9/7/16.
+//  Copyright © 2016 QingSun. All rights reserved.
+//
+
+#import "MainViewController.h"
+
+@interface MainViewController ()
+{
+    cv:: Mat cvImage;
+}
+
+@property (strong, nonatomic) IBOutlet UIImageView *imgView;
+
+@end
+
+@implementation MainViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [self showImage];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)showImage{
+
+    UIImage *img = [UIImage imageNamed:@"test.jpg"];
+
+    //convert the image to grayscale
+    cvImage = [self cvMatFromUIImage:img];
+
+    if (!cvImage.empty()) {
+        cv:: Mat gray;
+        //convert thr image to grayscale
+        cv:: cvtColor(cvImage, gray, CV_RGBA2GRAY);
+        //apply gaussian filter to remove small edges
+        cv:: GaussianBlur(gray, gray, cv::Size(5,5), 1.2);
+        //calulate edges with canny
+        cv:: Mat edges;
+        cv:: Canny(gray, edges, 0, 60);
+        //fill image with white color
+        cvImage.setTo(cv::Scalar::all(255));
+        //change color on edges
+        cvImage.setTo(cv::Scalar(0,128,255,255),edges);
+        //convert cv::Mat to UIImage and show the resulting image
+        self.imgView.image = [self UIImageFromCVMat:cvImage];
+    }
+
+}
+
+- (cv::Mat)cvMatFromUIImage:(UIImage *)image
+{
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
+    CGFloat cols = image.size.width;
+    CGFloat rows = image.size.height;
+
+    cv::Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
+
+    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to  data
+                                                    cols,                       // Width of bitmap
+                                                    rows,                       // Height of bitmap
+                                                    8,                          // Bits per component
+                                                    cvMat.step[0],              // Bytes per row
+                                                    colorSpace,                 // Colorspace
+                                                    kCGImageAlphaNoneSkipLast |
+                                                    kCGBitmapByteOrderDefault); // Bitmap info flags
+
+    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
+    CGContextRelease(contextRef);
+
+    return cvMat;
+}
+
+
+-(UIImage *)UIImageFromCVMat:(cv::Mat)cvMat
+{
+    NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
+    CGColorSpaceRef colorSpace;
+
+    if (cvMat.elemSize() == 1) {
+        colorSpace = CGColorSpaceCreateDeviceGray();
+    } else {
+        colorSpace = CGColorSpaceCreateDeviceRGB();
+    }
+
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+
+    // Creating CGImage from cv::Mat
+    CGImageRef imageRef = CGImageCreate(cvMat.cols,                                 //width
+                                        cvMat.rows,                                 //height
+                                        8,                                          //bits per component
+                                        8 * cvMat.elemSize(),                       //bits per pixel
+                                        cvMat.step[0],                            //bytesPerRow
+                                        colorSpace,                                 //colorspace
+                                        kCGImageAlphaNone|kCGBitmapByteOrderDefault,// bitmap info
+                                        provider,                                   //CGDataProviderRef
+                                        NULL,                                       //decode
+                                        false,                                      //should interpolate
+                                        kCGRenderingIntentDefault                   //intent
+                                        );
+
+
+    // Getting UIImage from CGImage
+    UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    CGDataProviderRelease(provider);
+    CGColorSpaceRelease(colorSpace);
+
+    return finalImage;
+}
+
+@end
+
 </code></pre>
 
-<p>输入你的电脑账户密码后开始安装</p>
-<pre><code>sunyidembp:cmake sunyi$ sudo ./bootstrap && sudo make && sudo make install
-CMake 3.6.1, Copyright 2000-2016 Kitware, Inc.
-Found GNU toolchain
-C compiler on this system is: gcc 
-C++ compiler on this system is: g++ 
-Makefile processor on this system is: make
-g++ is GNU compiler
-g++ has setenv
-g++ has unsetenv
-g++ does not have environ in stdlib.h
-g++ has stl wstring
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmake.cxx -o cmake.o
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmakemain.cxx -o cmakemain.o
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmcmd.cxx -o cmcmd.o
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommandArgumentLexer.cxx -o cmCommandArgumentLexer.o
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommandArgumentParser.cxx -o cmCommandArgumentParser.o
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommandArgumentParserHelper.cxx -o cmCommandArgumentParserHelper.o
-g++  -I/Users/sunyi/Documents/cmake/Bootstrap.cmk -I/Users/sunyi/Documents/cmake/Source   -I/Users/sunyi/Documents/cmake/Utilities -c /Users/sunyi/Documents/cmake/Source/cmCommonTargetGenerator.cxx -o cmCommonTargetGenerator.o
-</code></pre>
-
-<p>中间会再次要求输入一次密码，即可完成安装。</p>
+<p>这里要注意，在使用 OpenCV 函数的m文件，后缀需改成mm，告诉Xcode，这里有C++与 Objc的混合使用。</p>
+<p>好了，我们来看一下运行的效果图</p>
+<p><img src="http://7qn7ig.com1.z0.glb.clouddn.com/opencv.jpg" alt=""></p>
+<p>接下来，就是熟悉一下Open CV的其他函数使用情况了。</p>
 
     </div>
     <footer>
@@ -178,10 +300,8 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/09/07/在iOS中使用OpenCV/" class="alignleft prev" title="在iOS中使用OpenCV">在iOS中使用OpenCV</a>
     
-    
-    <a href="/2016/08/31/关于“发上等愿，结中等缘，享下等福；择高处立，寻平处住，向宽处行”的解释/" class="alignright next" title="关于“发上等愿，结中等缘，享下等福；择高处立，寻平处住，向宽处行”的解释">关于“发上等愿，结中等缘，享下等福；择高处立，寻平处住，向宽处行”的解释</a>
+    <a href="/2016/09/07/如何在mac上安装cmake？/" class="alignright next" title="如何在mac上安装cmake？">如何在mac上安装cmake？</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -191,7 +311,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/09/07/如何在mac上安装cmake？/" data-title="如何在mac上安装cmake？" data-url="www.sunyi.pub/2016/09/07/如何在mac上安装cmake？/"></div>
+		<div class="ds-thread" data-thread-key="2016/09/07/在iOS中使用OpenCV/" data-title="在iOS中使用OpenCV" data-url="www.sunyi.pub/2016/09/07/在iOS中使用OpenCV/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
