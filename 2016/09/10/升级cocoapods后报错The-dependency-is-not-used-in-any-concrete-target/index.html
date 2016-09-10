@@ -15,16 +15,16 @@
 	})();
 	</script>
   
-  <title>在iOS中使用OpenCV | Sun</title>
+  <title>升级cocoapods后报错The dependency  is not used in any concrete target. | Sun</title>
   <meta name="author" content="Sun">
   
-  <meta name="description" content="在iOS中使用Open VC比在windows和mac中使用要简单多了，先去Open VC官网下载对应的库文件（opencv2.framework.zip），解压后通过Xcode导入到工程中，导入完成后，来看看如何使用OpenVC。
-本文只简单介绍利用OpenVC将UIImage和Mat互相转换并且">
+  <meta name="description" content="问题是这样的，时隔多月，今天要用到cocoapods，但在执行pod install命令后，报错找不到pod install 命令，后来想，应该是我刚升级系统到OSX10.11的原因，所以pods需要重装，在10.11下安装pods的正确命令是：
+sudo gem install -n /usr/l">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="在iOS中使用OpenCV"/>
+  <meta property="og:title" content="升级cocoapods后报错The dependency  is not used in any concrete target."/>
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -82,175 +82,71 @@
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	在iOS中使用OpenCV
+	升级cocoapods后报错The dependency  is not used in any concrete target.
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-09-07T06:13:08.000Z" itemprop="datePublished">2016-09-07</time>
-    更新日期:<time datetime="2016-09-07T06:13:08.000Z" itemprop="dateModified">2016-09-07</time>
+    <time datetime="2016-09-10T05:56:35.000Z" itemprop="datePublished">2016-09-10</time>
+    更新日期:<time datetime="2016-09-10T05:56:34.000Z" itemprop="dateModified">2016-09-10</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>在iOS中使用Open VC比在windows和mac中使用要简单多了，先去Open VC官网下载对应的库文件（opencv2.framework.zip），解压后通过Xcode导入到工程中，导入完成后，来看看如何使用OpenVC。</p>
-<p>本文只简单介绍利用OpenVC将UIImage和Mat互相转换并且显示出来。</p>
-<p>先贴代码</p>
-<p>MainViewController.h</p>
-<pre><code>//
-//  MainViewController.h
-//  OCRTest
-//
-//  Created by 孙裔 on 9/7/16.
-//  Copyright © 2016 QingSun. All rights reserved.
-//
-
-#import <uikit uikit.h="">
-
-using namespace cv;
-
-@interface MainViewController : UIViewController
-
-@end
-</uikit></code></pre>
-
-<p>这里说一下，使用OpenCV，需要在头文件中引入命名空间cv，也就是添加这一句：</p>
-<pre><code>using namespace cv;
+        <p>问题是这样的，时隔多月，今天要用到cocoapods，但在执行pod install命令后，报错找不到pod install 命令，后来想，应该是我刚升级系统到OSX10.11的原因，所以pods需要重装，在10.11下安装pods的正确命令是：</p>
+<pre><code>sudo gem install -n /usr/local/bin cocoapods
 </code></pre>
 
-
-<p>MainViewController.mm</p>
-<pre><code>//
-//  MainViewController.m
-//  OCRTest
-//
-//  Created by 孙裔 on 9/7/16.
-//  Copyright © 2016 QingSun. All rights reserved.
-//
-
-#import "MainViewController.h"
-
-@interface MainViewController ()
-{
-    cv:: Mat cvImage;
-}
-
-@property (strong, nonatomic) IBOutlet UIImageView *imgView;
-
-@end
-
-@implementation MainViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    [self showImage];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)showImage{
-
-    UIImage *img = [UIImage imageNamed:@"test.jpg"];
-
-    //convert the image to grayscale
-    cvImage = [self cvMatFromUIImage:img];
-
-    if (!cvImage.empty()) {
-        cv:: Mat gray;
-        //convert thr image to grayscale
-        cv:: cvtColor(cvImage, gray, CV_RGBA2GRAY);
-        //apply gaussian filter to remove small edges
-        cv:: GaussianBlur(gray, gray, cv::Size(5,5), 1.2);
-        //calulate edges with canny
-        cv:: Mat edges;
-        cv:: Canny(gray, edges, 0, 60);
-        //fill image with white color
-        cvImage.setTo(cv::Scalar::all(255));
-        //change color on edges
-        cvImage.setTo(cv::Scalar(0,128,255,255),edges);
-        //convert cv::Mat to UIImage and show the resulting image
-        self.imgView.image = [self UIImageFromCVMat:cvImage];
-    }
-
-}
-
-- (cv::Mat)cvMatFromUIImage:(UIImage *)image
-{
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
-    CGFloat cols = image.size.width;
-    CGFloat rows = image.size.height;
-
-    cv::Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
-
-    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to  data
-                                                    cols,                       // Width of bitmap
-                                                    rows,                       // Height of bitmap
-                                                    8,                          // Bits per component
-                                                    cvMat.step[0],              // Bytes per row
-                                                    colorSpace,                 // Colorspace
-                                                    kCGImageAlphaNoneSkipLast |
-                                                    kCGBitmapByteOrderDefault); // Bitmap info flags
-
-    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
-    CGContextRelease(contextRef);
-
-    return cvMat;
-}
-
-
--(UIImage *)UIImageFromCVMat:(cv::Mat)cvMat
-{
-    NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
-    CGColorSpaceRef colorSpace;
-
-    if (cvMat.elemSize() == 1) {
-        colorSpace = CGColorSpaceCreateDeviceGray();
-    } else {
-        colorSpace = CGColorSpaceCreateDeviceRGB();
-    }
-
-    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
-
-    // Creating CGImage from cv::Mat
-    CGImageRef imageRef = CGImageCreate(cvMat.cols,                                 //width
-                                        cvMat.rows,                                 //height
-                                        8,                                          //bits per component
-                                        8 * cvMat.elemSize(),                       //bits per pixel
-                                        cvMat.step[0],                            //bytesPerRow
-                                        colorSpace,                                 //colorspace
-                                        kCGImageAlphaNone|kCGBitmapByteOrderDefault,// bitmap info
-                                        provider,                                   //CGDataProviderRef
-                                        NULL,                                       //decode
-                                        false,                                      //should interpolate
-                                        kCGRenderingIntentDefault                   //intent
-                                        );
-
-
-    // Getting UIImage from CGImage
-    UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-    CGDataProviderRelease(provider);
-    CGColorSpaceRelease(colorSpace);
-
-    return finalImage;
-}
-
-@end
-
+<p>在安装完成后，再次执行pod install，但遇到另一个报错，报错信息如下：</p>
+<pre><code>sunyideMacBook-Pro:OCRTest sunyi$ pod install
+Analyzing dependencies
+[!] The dependency `Mantle (~> 1.5.1)` is not used in any concrete target.
+The dependency `NYXImagesKit (~> 2.3)` is not used in any concrete target.
+The dependency `KVOController (~> 1.0.3)` is not used in any concrete target.
+The dependency `ActionSheetPicker-3.0 (~> 1.3.12)` is not used in any concrete target.
+The dependency `MBProgressHUD (~> 0.9)` is not used in any concrete target.
+The dependency `IQKeyboardManager (~> 3.2.3)` is not used in any concrete target.
+The dependency `FMDB (~> 2.5)` is not used in any concrete target.
+The dependency `BlocksKit (~> 2.2.5)` is not used in any concrete target.
+The dependency `AFNetworking (~> 2.5.0)` is not used in any concrete target.
+The dependency `AFDownloadRequestOperation (~> 2.0.1)` is not used in any concrete target.
+The dependency `MPNotificationView (~> 1.1.1)` is not used in any concrete target.
+The dependency `JSONKit-NoWarning (~> 1.2)` is not used in any concrete target.
+The dependency `Base64 (~> 1.0.1)` is not used in any concrete target.
+The dependency `iToast (~> 0.0.1)` is not used in any concrete target.
+The dependency `MJRefresh (~> 2.4.12)` is not used in any concrete target.
+The dependency `DTPickerPresenter (~> 0.2.0)` is not used in any concrete target.
+The dependency `UITableView+FDTemplateLayoutCell (~> 1.3)` is not used in any concrete target.
 </code></pre>
 
-<p>这里要注意，在使用 OpenCV 函数的m文件，后缀需改成mm，告诉Xcode，这里有C++与 Objc的混合使用。</p>
-<p>好了，我们来看一下运行的效果图</p>
-<p><img src="http://7qn7ig.com1.z0.glb.clouddn.com/opencv.jpg" alt=""></p>
-<p>接下来，就是熟悉一下Open CV的其他函数使用情况了。</p>
+<p>谷歌了一下，发现cocoapods升级到最新版后，pod文件的写法改变了，官网推荐的写法如下：</p>
+<pre><code>platform :ios, '8.0'
+#use_frameworks!个别需要用到它，比如reactiveCocoa
 
+target 'MyApp' do
+  pod 'AFNetworking', '~> 2.6'
+  pod 'ORStackView', '~> 3.0'
+  pod 'SwiftyJSON', '~> 2.3'
+end
+</code></pre>
+
+<p>上边的MyApp要换成你自己的工程名</p>
+<p>另外还有一种写法：</p>
+<pre><code>platform :ios, '8.0'
+#use_frameworks!个别需要用到它，比如reactiveCocoa
+
+def pods
+  pod 'AFNetworking', '~> 2.6'
+  pod 'ORStackView', '~> 3.0'
+  pod 'SwiftyJSON', '~> 2.3'
+end
+target 'MyApp' do
+  pods
+end
+</code></pre>
     </div>
     <footer>
         
@@ -300,10 +196,8 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/09/10/升级cocoapods后报错The-dependency-is-not-used-in-any-concrete-target/" class="alignleft prev" title="升级cocoapods后报错The dependency  is not used in any concrete target.">升级cocoapods后报错The dependency  is not used in any concrete target.</a>
     
-    
-    <a href="/2016/09/07/如何在mac上安装cmake？/" class="alignright next" title="如何在mac上安装cmake？">如何在mac上安装cmake？</a>
+    <a href="/2016/09/07/在iOS中使用OpenCV/" class="alignright next" title="在iOS中使用OpenCV">在iOS中使用OpenCV</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -313,7 +207,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/09/07/在iOS中使用OpenCV/" data-title="在iOS中使用OpenCV" data-url="www.sunyi.pub/2016/09/07/在iOS中使用OpenCV/"></div>
+		<div class="ds-thread" data-thread-key="2016/09/10/升级cocoapods后报错The-dependency-is-not-used-in-any-concrete-target/" data-title="升级cocoapods后报错The dependency  is not used in any concrete target." data-url="www.sunyi.pub/2016/09/10/升级cocoapods后报错The-dependency-is-not-used-in-any-concrete-target/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
