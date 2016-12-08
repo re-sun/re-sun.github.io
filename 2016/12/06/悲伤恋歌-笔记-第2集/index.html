@@ -15,16 +15,13 @@
 	})();
 	</script>
   
-  <title>如何使用httpd反代理tomcat | Sun</title>
+  <title>悲伤恋歌-笔记-第2集 | Sun</title>
   <meta name="author" content="Sun">
-  
-  <meta name="description" content="一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。
-三种方式的对比，具体请参考：http://www.ibm.c">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="如何使用httpd反代理tomcat"/>
+  <meta property="og:title" content="悲伤恋歌-笔记-第2集"/>
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -82,69 +79,21 @@
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	如何使用httpd反代理tomcat
+	悲伤恋歌-笔记-第2集
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-23T03:21:25.000Z" itemprop="datePublished">2016-08-23</time>
-    更新日期:<time datetime="2016-08-23T03:21:25.000Z" itemprop="dateModified">2016-08-23</time>
+    <time datetime="2016-12-05T16:05:31.000Z" itemprop="datePublished">2016-12-06</time>
+    更新日期:<time datetime="2016-12-05T16:05:31.000Z" itemprop="dateModified">2016-12-06</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。</p>
-<p>三种方式的对比，具体请参考：<a href="http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/</a></p>
-<p>今天介绍的是使用mod_proxy来整合，因为需求仅仅只是反代理，在稳定性和性能方面没有太大要求。</p>
-<p>1、编译安装apache，需要编译proxy相关的模块</p>
-<pre><code>[root@sunyi ~]# tar -zxvpf httpd-2.4.2.tar.gz   
-[root@sunyi ~]# cd httpd-2.4.2  
-[root@sunyi httpd-2.4.2]# ./configure --prefix=/usr/local/apache --enable-proxy --enable-proxy-ajp  --enable-rewrite --enable-so  --enable-headers --enable-expires  --enable-modules-shared=most --with-apr=/usr/local/apr/ --with-apr-util=/usr/local/apr-util/  
-[root@sunyi httpd-2.4.2]# make   
-[root@sunyi httpd-2.4.2]# make install 
-</code></pre>
-
-<p>2、配置apache虚拟主机，由于我的项目工程是存放在tomcat/webapps路径下的，所以在配置apache虚拟主机的时候，只需要代理tomcat的访问地址和端口号就好了。</p>
-<p>（1）找到httpd.conf文件，一般在conf目录下，如果不知道httpd安装在哪里，可以使用find命令来查找。</p>
-<pre><code>find / -name httpd.conf
-</code></pre>
-
-<p>(2)修改httpd.conf文件，添加需要配置的虚拟主机，为了方便日后维护，此次添加的虚拟主机不再httpd.conf中添加，而是新建一个.conf文件，然后在httpd.conf中将该文件include进去。</p>
-<p>虚拟主机配置代码如下：</p>
-<pre><code>
-&lt; VirtualHost *:80>
-        DocumentRoot /usr/local/score_record/scorerecord
-        ServerName rank.qingbaojun.com
-        ServerAlias rank.qingbaojun.com
-        ProxyPass / http://rank.qingbaojun.com:8080/ smax=5 max=20 ttl=120 retry=300
-        &lt; Directory "/usr/local/score_record/scorerecord">
-            Options  FollowSymLinks
-            AllowOverride all
-            Order allow,deny
-            Allow from all
-        &lt; /Directory>
-        &lt; IfModule mod_rewrite.c>
-                RewriteEngine On
-                RewriteRule ^(.*)-htm-(.*)$ .php?
-                RewriteRule ^(.*)/simple/([a-z0-9\_]+\.html)$ /simple/index.php?
-        &lt; /IfModule>
-        ErrorLog "/alidata/log/httpd/scorerecord-error.log"
-        CustomLog "/alidata/log/httpd/scorerecord.log" common
-&lt; /VirtualHost>
-</code></pre>
-
-
-<p>上述ProxyPass即为tomcat的访问地址。</p>
-<p>此外，还需在httpd.conf文件中要保证以下两处不被注释：</p>
-<pre><code>LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-</code></pre>
-
-<p>然后重启tomcat，再重启httpd就可以了。</p>
-
+        
     </div>
     <footer>
         
@@ -194,10 +143,10 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/08/23/头疼的httpd-tomcat整合/" class="alignleft prev" title="头疼的httpd+tomcat整合">头疼的httpd+tomcat整合</a>
+    <a href="/2016/12/08/中美俄三国演义，好戏才刚刚开始/" class="alignleft prev" title="中美俄三国演义，好戏才刚刚开始">中美俄三国演义，好戏才刚刚开始</a>
     
     
-    <a href="/2016/06/08/【iOS】关于使用数据短信验证码苹果IDFA审核问题/" class="alignright next" title="【iOS】关于使用数据短信验证码苹果IDFA审核问题">【iOS】关于使用数据短信验证码苹果IDFA审核问题</a>
+    <a href="/2016/12/06/悲伤恋歌-笔记-第1集/" class="alignright next" title="悲伤恋歌-笔记-第1集">悲伤恋歌-笔记-第1集</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -207,7 +156,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/08/23/如何使用httpd反代理tomcat/" data-title="如何使用httpd反代理tomcat" data-url="www.sunyi.pub/2016/08/23/如何使用httpd反代理tomcat/"></div>
+		<div class="ds-thread" data-thread-key="2016/12/06/悲伤恋歌-笔记-第2集/" data-title="悲伤恋歌-笔记-第2集" data-url="www.sunyi.pub/2016/12/06/悲伤恋歌-笔记-第2集/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
