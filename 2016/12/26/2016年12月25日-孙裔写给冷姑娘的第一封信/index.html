@@ -15,16 +15,18 @@
 	})();
 	</script>
   
-  <title>如何使用httpd反代理tomcat | Sun</title>
+  <title>Sun</title>
   <meta name="author" content="Sun">
   
-  <meta name="description" content="一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。
-三种方式的对比，具体请参考：http://www.ibm.c">
+  <meta name="description" content="title: 2016年12月25日—-孙裔写给冷姑娘的第一封信
+date: 2016-12-26 01:55:21
+冷姑娘，从今天开始，我要换写信的格式来跟你记录与你的点点滴滴了。我在想，如果我真的给你写信，你会不会回我，但我觉得更大的可能是，你连信都收不到，因为你懒得去开信箱。。。
+昨天，是平安">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="如何使用httpd反代理tomcat"/>
+  
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -82,68 +84,32 @@
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	如何使用httpd反代理tomcat
+	
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-23T03:21:25.000Z" itemprop="datePublished">2016-08-23</time>
-    更新日期:<time datetime="2016-08-23T03:21:25.000Z" itemprop="dateModified">2016-08-23</time>
+    <time datetime="2016-12-25T17:54:31.000Z" itemprop="datePublished">2016-12-26</time>
+    更新日期:<time datetime="2016-12-25T17:54:31.000Z" itemprop="dateModified">2016-12-26</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。</p>
-<p>三种方式的对比，具体请参考：<a href="http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/</a></p>
-<p>今天介绍的是使用mod_proxy来整合，因为需求仅仅只是反代理，在稳定性和性能方面没有太大要求。</p>
-<p>1、编译安装apache，需要编译proxy相关的模块</p>
-<pre><code>[root@sunyi ~]# tar -zxvpf httpd-2.4.2.tar.gz   
-[root@sunyi ~]# cd httpd-2.4.2  
-[root@sunyi httpd-2.4.2]# ./configure --prefix=/usr/local/apache --enable-proxy --enable-proxy-ajp  --enable-rewrite --enable-so  --enable-headers --enable-expires  --enable-modules-shared=most --with-apr=/usr/local/apr/ --with-apr-util=/usr/local/apr-util/  
-[root@sunyi httpd-2.4.2]# make   
-[root@sunyi httpd-2.4.2]# make install 
-</code></pre>
-
-<p>2、配置apache虚拟主机，由于我的项目工程是存放在tomcat/webapps路径下的，所以在配置apache虚拟主机的时候，只需要代理tomcat的访问地址和端口号就好了。</p>
-<p>（1）找到httpd.conf文件，一般在conf目录下，如果不知道httpd安装在哪里，可以使用find命令来查找。</p>
-<pre><code>find / -name httpd.conf
-</code></pre>
-
-<p>(2)修改httpd.conf文件，添加需要配置的虚拟主机，为了方便日后维护，此次添加的虚拟主机不再httpd.conf中添加，而是新建一个.conf文件，然后在httpd.conf中将该文件include进去。</p>
-<p>虚拟主机配置代码如下：</p>
-<pre><code>
-&lt; VirtualHost *:80>
-        DocumentRoot /usr/local/score_record/scorerecord
-        ServerName rank.qingbaojun.com
-        ServerAlias rank.qingbaojun.com
-        ProxyPass / http://rank.qingbaojun.com:8080/ smax=5 max=20 ttl=120 retry=300
-        &lt; Directory "/usr/local/score_record/scorerecord">
-            Options  FollowSymLinks
-            AllowOverride all
-            Order allow,deny
-            Allow from all
-        &lt; /Directory>
-        &lt; IfModule mod_rewrite.c>
-                RewriteEngine On
-                RewriteRule ^(.*)-htm-(.*)$ .php?
-                RewriteRule ^(.*)/simple/([a-z0-9\_]+\.html)$ /simple/index.php?
-        &lt; /IfModule>
-        ErrorLog "/alidata/log/httpd/scorerecord-error.log"
-        CustomLog "/alidata/log/httpd/scorerecord.log" common
-&lt; /VirtualHost>
-</code></pre>
-
-
-<p>上述ProxyPass即为tomcat的访问地址。</p>
-<p>此外，还需在httpd.conf文件中要保证以下两处不被注释：</p>
-<pre><code>LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-</code></pre>
-
-<p>然后重启tomcat，再重启httpd就可以了。</p>
+        <p>title: 2016年12月25日—-孙裔写给冷姑娘的第一封信</p>
+<p>date: 2016-12-26 01:55:21</p>
+<p>冷姑娘，从今天开始，我要换写信的格式来跟你记录与你的点点滴滴了。我在想，如果我真的给你写信，你会不会回我，但我觉得更大的可能是，你连信都收不到，因为你懒得去开信箱。。。</p>
+<p>昨天，是平安夜，罗琦让你陪她玩，但是我知道你肚子疼，刚好在生理期，所以我是一千个一万个不愿意让你出来的，担心你受凉又肚子疼了。然后我让你跟罗琦说，你陪罗琦吃完饭后，先回罗琦家睡觉，剩下的由我来陪罗琦去玩，结果你竟然真的以为我是想认识罗琦，你就看不出来我是为了让你早点回去睡觉才说要陪罗琦玩的吗？你怎么那么笨呢，你还一本正经的想要怎么把罗琦介绍给我。。真的是，太笨了。</p>
+<p>晚上找罗琦给你发的那个酒吧的时候，你跟我说，你肚子疼，你不知道我有多担心，结果你还笑嘻嘻的。后来让你回到罗琦家了跟我说一声，我等到快凌晨2点了，你还没跟我说，我在家里急的要死，刚穿好衣服正要去酒吧找你，你给我发来信息说刚到，哎，愁死我了你。后来让你早点睡你也不听话，第二天早上起来看你三点多还发朋友圈，估计你修图修了好久。。真是败给你了。</p>
+<p>中午让你出来带你去喝鸡汤，看到你的时候，我好心疼，因为你脸很憔悴，还有黑眼圈，如果以后每次你生理期，我能在你身边照顾你，那该有多好，给你熬红糖水，给你熬粥喝，给你保暖。不过，你今天穿的白色外套，还有里边穿的一件白色高领毛衣，真的很好看，超级好看，跟你走在一起，很开心，很满足。中午我点了很多鸡汤，结果你只喝了两碗就跟我说饱了，饭也只吃了一口，为什么你跟我一起吃饭的时候，胃就变成小鸟胃了呢。。跟志平就能大吃大喝的，我很羡慕。</p>
+<p>最让我愁的是，你怎么老拿罗琦的照片给我看，我跟你说了几十次我对她不感兴趣，你怎么就看不出来我喜欢你呢，我不喜欢你为什么总担心你会着凉，为什么老监督你吃饭，为什么要监督你睡觉，你怎么那么笨的，如果是一般的异性朋友，我这么对她，你不觉得很奇怪吗？你太笨了！！！以后你再给我看其他女生照片，我要打人啦~</p>
+<p>吃完饭后，外边在下雨，我帮你撑伞的时候，我觉得很幸福，因为这时候，我感觉离你最近，当时心跳的很快，好紧张。我真的很希望，每一次下雨，我都能帮你撑伞，帮你遮风挡雨。你在雨中不让我看你脸害羞的时候，超级好看，我就喜欢看你害羞的样子，超可爱的。</p>
+<p>晚上，让你不要吃凉的不要吃辛辣的，结果你竟然还吃了烧烤，还拍照给我看！！！你真的是，太不听话了，还咳嗽了，问是不是你在咳嗽，你竟然还骗我，胆子忒大了你！等着吧，等我元旦过去，看你还跑的了吗！</p>
+<p>刚才你跟我说，你不开心了，因为今天圣诞节，看不到我削苹果能一刀不断的削完，问我12点前能不能削好，我说我家里没有苹果，能感受到你不开心，然后我就赶紧结束跟你们的语音，出去买苹果了。可是当时都11点了，好多水果店都关门了，后来找到一家水果店，终于买了苹果回来，虽然被大雨淋成落汤鸡了，不过到家后还是赶紧削给你看，前面两个都失败了，第三个才成功了，但是！但是！当我要给你拍视频炫耀的时候，拿起来竟然断了，断了！太脆了。。。诶。。视频发给你后，你竟然还敢嘲笑我。不过，只要你开心，我很乐意让你嘲笑，哈哈哈~</p>
+<p>这个时候，你应该还在刷题赶作业吧，你就是轴，太固执了，让你早点睡你偏不听，非要赶作业，说是什么担心明天会被笑话，诶，好心疼你。。。我要努力，以后让你不要受那么多苦！</p>
+<p>冷姑娘，我喜欢你。晚安。wanan.</p>
 
     </div>
     <footer>
@@ -194,10 +160,8 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/08/23/头疼的httpd-tomcat整合/" class="alignleft prev" title="头疼的httpd+tomcat整合">头疼的httpd+tomcat整合</a>
     
-    
-    <a href="/2016/06/08/【iOS】关于使用数据短信验证码苹果IDFA审核问题/" class="alignright next" title="【iOS】关于使用数据短信验证码苹果IDFA审核问题">【iOS】关于使用数据短信验证码苹果IDFA审核问题</a>
+    <a href="/2016/12/22/2016年12月21日/" class="alignright next" title="2016年12月21日">2016年12月21日</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -207,7 +171,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/08/23/如何使用httpd反代理tomcat/" data-title="如何使用httpd反代理tomcat" data-url="www.sunyi.pub/2016/08/23/如何使用httpd反代理tomcat/"></div>
+		<div class="ds-thread" data-thread-key="2016/12/26/2016年12月25日-孙裔写给冷姑娘的第一封信/" data-title="" data-url="www.sunyi.pub/2016/12/26/2016年12月25日-孙裔写给冷姑娘的第一封信/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
