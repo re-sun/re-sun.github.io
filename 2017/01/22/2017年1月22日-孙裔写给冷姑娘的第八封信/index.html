@@ -15,16 +15,16 @@
 	})();
 	</script>
   
-  <title>如何使用httpd反代理tomcat | Sun</title>
+  <title>2017年1月22日-孙裔写给冷姑娘的第八封信 | Sun</title>
   <meta name="author" content="Sun">
   
-  <meta name="description" content="一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。
-三种方式的对比，具体请参考：http://www.ibm.c">
+  <meta name="description" content="date: 2017-01-22 10:23:53
+冷姑娘，刚才，你开我玩笑，让我和在潘君婚礼上那个伴娘说“我谁都不想牵 就是想牵你的手”，于是，我顺着你的意思，跟你说了，“我谁都不想牵 就是想牵你的手”，你问我，那个女生会不会被我吓跑，我问你，你会不会被我吓跑，你说，我又轻浮了。但你不知道，我说的">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="如何使用httpd反代理tomcat"/>
+  <meta property="og:title" content="2017年1月22日-孙裔写给冷姑娘的第八封信"/>
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -82,68 +82,25 @@
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	如何使用httpd反代理tomcat
+	2017年1月22日-孙裔写给冷姑娘的第八封信
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-23T03:21:25.000Z" itemprop="datePublished">2016-08-23</time>
-    更新日期:<time datetime="2016-08-23T03:21:25.000Z" itemprop="dateModified">2016-08-23</time>
+    <time datetime="2017-01-22T02:41:56.000Z" itemprop="datePublished">2017-01-22</time>
+    更新日期:<time datetime="2017-01-22T02:41:56.000Z" itemprop="dateModified">2017-01-22</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。</p>
-<p>三种方式的对比，具体请参考：<a href="http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/</a></p>
-<p>今天介绍的是使用mod_proxy来整合，因为需求仅仅只是反代理，在稳定性和性能方面没有太大要求。</p>
-<p>1、编译安装apache，需要编译proxy相关的模块</p>
-<pre><code>[root@sunyi ~]# tar -zxvpf httpd-2.4.2.tar.gz   
-[root@sunyi ~]# cd httpd-2.4.2  
-[root@sunyi httpd-2.4.2]# ./configure --prefix=/usr/local/apache --enable-proxy --enable-proxy-ajp  --enable-rewrite --enable-so  --enable-headers --enable-expires  --enable-modules-shared=most --with-apr=/usr/local/apr/ --with-apr-util=/usr/local/apr-util/  
-[root@sunyi httpd-2.4.2]# make   
-[root@sunyi httpd-2.4.2]# make install 
-</code></pre>
-
-<p>2、配置apache虚拟主机，由于我的项目工程是存放在tomcat/webapps路径下的，所以在配置apache虚拟主机的时候，只需要代理tomcat的访问地址和端口号就好了。</p>
-<p>（1）找到httpd.conf文件，一般在conf目录下，如果不知道httpd安装在哪里，可以使用find命令来查找。</p>
-<pre><code>find / -name httpd.conf
-</code></pre>
-
-<p>(2)修改httpd.conf文件，添加需要配置的虚拟主机，为了方便日后维护，此次添加的虚拟主机不再httpd.conf中添加，而是新建一个.conf文件，然后在httpd.conf中将该文件include进去。</p>
-<p>虚拟主机配置代码如下：</p>
-<pre><code>
-&lt; VirtualHost *:80>
-        DocumentRoot /usr/local/score_record/scorerecord
-        ServerName rank.qingbaojun.com
-        ServerAlias rank.qingbaojun.com
-        ProxyPass / http://rank.qingbaojun.com:8080/ smax=5 max=20 ttl=120 retry=300
-        &lt; Directory "/usr/local/score_record/scorerecord">
-            Options  FollowSymLinks
-            AllowOverride all
-            Order allow,deny
-            Allow from all
-        &lt; /Directory>
-        &lt; IfModule mod_rewrite.c>
-                RewriteEngine On
-                RewriteRule ^(.*)-htm-(.*)$ .php?
-                RewriteRule ^(.*)/simple/([a-z0-9\_]+\.html)$ /simple/index.php?
-        &lt; /IfModule>
-        ErrorLog "/alidata/log/httpd/scorerecord-error.log"
-        CustomLog "/alidata/log/httpd/scorerecord.log" common
-&lt; /VirtualHost>
-</code></pre>
-
-
-<p>上述ProxyPass即为tomcat的访问地址。</p>
-<p>此外，还需在httpd.conf文件中要保证以下两处不被注释：</p>
-<pre><code>LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-</code></pre>
-
-<p>然后重启tomcat，再重启httpd就可以了。</p>
+        <p>date: 2017-01-22 10:23:53</p>
+<p>冷姑娘，刚才，你开我玩笑，让我和在潘君婚礼上那个伴娘说“我谁都不想牵 就是想牵你的手”，于是，我顺着你的意思，跟你说了，“我谁都不想牵 就是想牵你的手”，你问我，那个女生会不会被我吓跑，我问你，你会不会被我吓跑，你说，我又轻浮了。但你不知道，我说的是真的，我有多想牵你的手，牵着你的手一起压马路，牵着你的手陪你逛街，就想这么一直牵着。</p>
+<p>就像昨天晚上，我问你的手还疼不疼，你说疼，我说昨晚我应该帮你揉揉的，然后你又说我轻浮，你永远不知道，你给我发你手指受伤的那两张图的时候，我有多心疼，我有多想帮你揉揉。</p>
+<p>刚才你一直问我昨晚为什么三点睡，我说刚开始是工作，后来一直看我的博客，你说我回忆以前的，我跟你强调是这几个月的，你太笨了，这几个月的，很明显，都是关于你的，看着我记录跟你的点点滴滴，就好像回到现场一样，很开心，很满足，我想你，想着与你一起度过的美好时光。</p>
+<p>算了，你这个麻木不仁的人，说的再多你也不会明白。</p>
 
     </div>
     <footer>
@@ -194,10 +151,8 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/08/23/头疼的httpd-tomcat整合/" class="alignleft prev" title="头疼的httpd+tomcat整合">头疼的httpd+tomcat整合</a>
     
-    
-    <a href="/2016/06/08/【iOS】Xcode7-上传ERROR-ITMS-90535-Unexpected-CFBundleExecutable-Key-的解决方案/" class="alignright next" title="【iOS】Xcode7 上传ERROR ITMS-90535 Unexpected CFBundleExecutable Key.的解决方案">【iOS】Xcode7 上传ERROR ITMS-90535 Unexpected CFBundleExecutable Key.的解决方案</a>
+    <a href="/2017/01/19/2017年1月19日-孙裔写给冷姑娘的第七封信/" class="alignright next" title="2017年1月19日-孙裔写给冷姑娘的第七封信">2017年1月19日-孙裔写给冷姑娘的第七封信</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -207,7 +162,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/08/23/如何使用httpd反代理tomcat/" data-title="如何使用httpd反代理tomcat" data-url="www.sunyi.pub/2016/08/23/如何使用httpd反代理tomcat/"></div>
+		<div class="ds-thread" data-thread-key="2017/01/22/2017年1月22日-孙裔写给冷姑娘的第八封信/" data-title="2017年1月22日-孙裔写给冷姑娘的第八封信" data-url="www.sunyi.pub/2017/01/22/2017年1月22日-孙裔写给冷姑娘的第八封信/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
