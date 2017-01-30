@@ -15,16 +15,16 @@
 	})();
 	</script>
   
-  <title>如何使用httpd反代理tomcat | Sun</title>
+  <title>2017年1月28日-孙裔写给冷姑娘的第十封信 | Sun</title>
   <meta name="author" content="Sun">
   
-  <meta name="description" content="一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。
-三种方式的对比，具体请参考：http://www.ibm.c">
+  <meta name="description" content="date: 2017-01-28 09:08:35
+冷姑娘，你现在应该还在睡着吧，昨晚我们电话聊到快凌晨五点。我现在在回家的动车上，第一次在火车上过年，本来还挺失落的，不过很幸运，有你陪我，虽然只是电话。昨天我们聊了很多，从早晨你睡醒，一直到大年初一凌晨，我看了一下，这一天，手机里一共有55条通话记">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="如何使用httpd反代理tomcat"/>
+  <meta property="og:title" content="2017年1月28日-孙裔写给冷姑娘的第十封信"/>
   <meta property="og:site_name" content="Sun"/>
 
   
@@ -82,68 +82,29 @@
   <div class="post-content">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-	如何使用httpd反代理tomcat
+	2017年1月28日-孙裔写给冷姑娘的第十封信
   </h1>
   <p class="article-author">By
     
       <a href="www.sunyi.pub" title="Sun">Sun</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-23T03:21:25.000Z" itemprop="datePublished">2016-08-23</time>
-    更新日期:<time datetime="2016-08-23T03:21:25.000Z" itemprop="dateModified">2016-08-23</time>
+    <time datetime="2017-01-30T02:15:03.000Z" itemprop="datePublished">2017-01-30</time>
+    更新日期:<time datetime="2017-01-30T02:15:03.000Z" itemprop="dateModified">2017-01-30</time>
     
   </p>
 </header>
     <div class="entry">
 		
-        <p>一般来讲，配置apache和tomcat的整合有三种方式，mod_proxy,mod_ajp和mod_jk等三种方式，前2种配置步骤类似且相对容易，且只支持apache2.2以后的版本，mod_jk则配置相对复杂，但强在稳定性和性能方面。</p>
-<p>三种方式的对比，具体请参考：<a href="http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat/</a></p>
-<p>今天介绍的是使用mod_proxy来整合，因为需求仅仅只是反代理，在稳定性和性能方面没有太大要求。</p>
-<p>1、编译安装apache，需要编译proxy相关的模块</p>
-<pre><code>[root@sunyi ~]# tar -zxvpf httpd-2.4.2.tar.gz   
-[root@sunyi ~]# cd httpd-2.4.2  
-[root@sunyi httpd-2.4.2]# ./configure --prefix=/usr/local/apache --enable-proxy --enable-proxy-ajp  --enable-rewrite --enable-so  --enable-headers --enable-expires  --enable-modules-shared=most --with-apr=/usr/local/apr/ --with-apr-util=/usr/local/apr-util/  
-[root@sunyi httpd-2.4.2]# make   
-[root@sunyi httpd-2.4.2]# make install 
-</code></pre>
-
-<p>2、配置apache虚拟主机，由于我的项目工程是存放在tomcat/webapps路径下的，所以在配置apache虚拟主机的时候，只需要代理tomcat的访问地址和端口号就好了。</p>
-<p>（1）找到httpd.conf文件，一般在conf目录下，如果不知道httpd安装在哪里，可以使用find命令来查找。</p>
-<pre><code>find / -name httpd.conf
-</code></pre>
-
-<p>(2)修改httpd.conf文件，添加需要配置的虚拟主机，为了方便日后维护，此次添加的虚拟主机不再httpd.conf中添加，而是新建一个.conf文件，然后在httpd.conf中将该文件include进去。</p>
-<p>虚拟主机配置代码如下：</p>
-<pre><code>
-&lt; VirtualHost *:80>
-        DocumentRoot /usr/local/score_record/scorerecord
-        ServerName rank.qingbaojun.com
-        ServerAlias rank.qingbaojun.com
-        ProxyPass / http://rank.qingbaojun.com:8080/ smax=5 max=20 ttl=120 retry=300
-        &lt; Directory "/usr/local/score_record/scorerecord">
-            Options  FollowSymLinks
-            AllowOverride all
-            Order allow,deny
-            Allow from all
-        &lt; /Directory>
-        &lt; IfModule mod_rewrite.c>
-                RewriteEngine On
-                RewriteRule ^(.*)-htm-(.*)$ .php?
-                RewriteRule ^(.*)/simple/([a-z0-9\_]+\.html)$ /simple/index.php?
-        &lt; /IfModule>
-        ErrorLog "/alidata/log/httpd/scorerecord-error.log"
-        CustomLog "/alidata/log/httpd/scorerecord.log" common
-&lt; /VirtualHost>
-</code></pre>
-
-
-<p>上述ProxyPass即为tomcat的访问地址。</p>
-<p>此外，还需在httpd.conf文件中要保证以下两处不被注释：</p>
-<pre><code>LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-</code></pre>
-
-<p>然后重启tomcat，再重启httpd就可以了。</p>
+        <p>date: 2017-01-28 09:08:35</p>
+<p>冷姑娘，你现在应该还在睡着吧，昨晚我们电话聊到快凌晨五点。我现在在回家的动车上，第一次在火车上过年，本来还挺失落的，不过很幸运，有你陪我，虽然只是电话。昨天我们聊了很多，从早晨你睡醒，一直到大年初一凌晨，我看了一下，这一天，手机里一共有55条通话记录，虽然大多数都是因为无信号重拨的。</p>
+<p>昨天早上你心情很低落，因为你妈妈又逼你相亲了，听你讲完，当时我觉得很没用，如果我早生几年，也许我就可以直接去跟你爸妈说，让我娶你了。为什么在我最低谷的时候遇见你，为什么在我最低谷的时候喜欢上你，我预想的不是这样，我一直预想的是，在我什么都为你准备好的时候，遇见你，给你最好的最踏实的幸福和快乐，而不是现在这样，要去考虑这么多问题，这并不是我想要给你的。特别是当听到你说，你不想活了，我很心疼你，为什么要让你独自去面对这么多残忍的问题，我之前以为你回家也许你妈妈只是跟你提一下相亲的事情，我从来不能理解你之前说你妈妈都把你逼到一个角落里了，因为在我从小的认知里，相亲离我的生活很遥远，基本都是从电视里去了解。现在脑子迷迷糊糊的，只能尽力去回忆我们昨天早上的谈话内容，但好像聊的不多，后来你爸爸过来接你回家吃饭了。</p>
+<p>下午吃完饭后，你给我打电话，我们聊了很久，同样也是断断续续的信号，总是中断我们的谈话。昨天下午，我终于还是说了，我喜欢你。大前天，我们独处的时候，我们都没有点破，虽然彼此心里都知道，我们谈论的是什么。我没有点破我喜欢你，是因为我不想因为我的喜欢会给你带来负担，我想我对你的喜欢，应该是温和而细腻的，应该是给你带来快乐和幸福的，而不是给你带来负担和烦恼。当时在火车上，信号很不好，我想过很多种跟你表白的场景，但是从来没有想过会在火车上跟你表白，而且信号还老断断续续的，太不爽了。你说，你年后随便找个人结婚，你过你的，他过他的，问我会不会鄙视你。当时还想说你来着，你怎么这个时候还在担心别人会不会鄙视你，因为这个时候最重要的是你会不会过的好，他对你够不够好，而不是担心别人会不会鄙视你，笨！我问你，有没有考虑我，你说，我不行，因为我想要正常的家庭，但你不知道，我有多想陪在你身边，即使只是假结婚，因为至少在那段时间里，我能照顾你，能给你带来开心和快乐，即使你不喜欢我，待你遇到你喜欢的男生后离开我，都没关系，相比之下，我更不放心你跟别人结婚，因为我害怕你受委屈，害怕你过的不好，所以，如果你非要走到这一步，让我来照顾你，好吗？</p>
+<p>我跟你说，要坚持，给自己一点时间，其实，也是想给我自己一点时间，我暗自下定决心，在不能和你见面的半年里，我一定要尽力去改变我的现状，为明年你不会再面对妈妈的逼婚，为我们的未来。每次一听你难受的声音，我都会很自责，为什么这时候陪在你身边的不是我，我只能隔着电话，不知所措的说一些安慰你的话，这些话并不能真正的帮到你什么，后面该面对的还是需要你一个人去面对，我会觉得自己很没用，从未如此觉得。</p>
+<p>晚上我们很少联系，我估计你在看春晚，所以我吃完饭看了会儿书，差不多10点就睡了，很早就睡了，闹钟调到12点之前，想着12点给你打电话一起跨年。后来，我们从凌晨1点半聊到五点钟，直到后来你让我去睡觉，虽然我没有睡着。。。</p>
+<h4 id="1月30日续">1月30日续</h4><hr>
+<p>前天在动车上没写完，今天想再写，可好像已经想不起来我们大年初一从凌晨1点聊到五点聊了哪些内容，感觉这两天，我们聊了很多很多，多的我都记不住了，脑子本来就不是很好。我只记得，我们那天聊完之后，感觉又更近了一步，我会有一种感觉，感觉你已经很温和地接受我对你的喜欢你，所以在挂完电话后，我很开心，开心的睡不着。</p>
+<p>还是老样子，我希望，我对你的喜欢，不会给你造成任何负担，不会让你感到烦恼，因为，喜欢一个人，不就是希望她快乐幸福吗？我喜欢你，很喜欢很喜欢你。</p>
 
     </div>
     <footer>
@@ -194,10 +155,8 @@ with(document)0[
 
  <nav id="pagination" >
     
-    <a href="/2016/08/23/头疼的httpd-tomcat整合/" class="alignleft prev" title="头疼的httpd+tomcat整合">头疼的httpd+tomcat整合</a>
     
-    
-    <a href="/2016/06/08/【iOS】Xcode7-上传ERROR-ITMS-90535-Unexpected-CFBundleExecutable-Key-的解决方案/" class="alignright next" title="【iOS】Xcode7 上传ERROR ITMS-90535 Unexpected CFBundleExecutable Key.的解决方案">【iOS】Xcode7 上传ERROR ITMS-90535 Unexpected CFBundleExecutable Key.的解决方案</a>
+    <a href="/2017/01/26/2017年1月26日-孙裔写给冷姑娘的第九封信/" class="alignright next" title="2017年1月26日-孙裔写给冷姑娘的第九封信">2017年1月26日-孙裔写给冷姑娘的第九封信</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -207,7 +166,7 @@ with(document)0[
 	
 	<section id="comment">
 		<!-- 多说评论框 start -->
-		<div class="ds-thread" data-thread-key="2016/08/23/如何使用httpd反代理tomcat/" data-title="如何使用httpd反代理tomcat" data-url="www.sunyi.pub/2016/08/23/如何使用httpd反代理tomcat/"></div>
+		<div class="ds-thread" data-thread-key="2017/01/30/2017年1月28日-孙裔写给冷姑娘的第十封信/" data-title="2017年1月28日-孙裔写给冷姑娘的第十封信" data-url="www.sunyi.pub/2017/01/30/2017年1月28日-孙裔写给冷姑娘的第十封信/"></div>
 		<!-- 多说评论框 end -->
 		<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 		<script type="text/javascript">
